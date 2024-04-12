@@ -1,60 +1,101 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Button, StyleSheet, TextInput } from 'react-native';
+import { Table, Row, Rows } from 'react-native-table-component';
+import axiosInstance from '../axiosInstance';
 
-const GradeScreen = () => {
-  const [grade, setGrade] = useState('');
-  const [subject, setSubject] = useState('');
+const MarksTable = () => {
+  const [studentData, setStudentData] = useState([]);
 
-  const handleAddGrade = () => {
-    // Logic to add grade to database or perform any other action
-    console.log(`Added grade ${grade} for subject ${subject}`);
-    // Reset form fields after adding grade
-    setGrade('');
-    setSubject('');
+  useEffect(() => {
+    fetchStudents();
+  }, []);
+
+  const fetchStudents = async () => {
+    try {
+      const response = await axiosInstance.get('http://192.168.27.213:6554/api/users/');
+      if (response.status === 200) {
+        const students = response.data;
+        const initialStudentData = students.map(student => ({
+          rollNumber: student.rollNumber,
+          username: student.username,
+          classValue: student.classValue,
+          section: student.section,
+          subject: '',
+          exam: '',
+          marks: '',
+        }));
+        setStudentData(initialStudentData);
+      } else {
+        throw new Error('Failed to fetch students');
+      }
+    } catch (error) {
+      console.error('Error fetching students:', error.message);
+    }
+  };
+
+  const handleMarksChange = (text, rowIndex, columnName) => {
+    const updatedStudentData = [...studentData];
+    updatedStudentData[rowIndex][columnName] = text;
+    setStudentData(updatedStudentData);
+  };
+
+  const handleSubmitMarks = async () => {
+    try {
+      // Send marks data to the server to save in the database
+      const response = await axiosInstance.post('http://192.168.27.213:6554/api/grades', {
+        grades: studentData,
+      });
+      if (response.status === 201) {
+        alert('Marks uploaded successfully');
+      } else {
+        throw new Error('Failed to upload marks');
+      }
+    } catch (error) {
+      console.error('Error uploading marks:', error.message);
+      alert('Failed to upload marks. Please try again.');
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Add Grade</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter grade"
-        value={grade}
-        onChangeText={text => setGrade(text)}
-        keyboardType="numeric"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Enter subject"
-        value={subject}
-        onChangeText={text => setSubject(text)}
-      />
-      <Button title="Add Grade" onPress={handleAddGrade} />
+      <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
+        <Row data={['Roll Number', 'Username', 'Class', 'Section', 'Subject', 'Exam', 'Marks']} style={styles.head} textStyle={styles.text} />
+        <Rows
+          data={studentData.map((student, index) => [
+            student.rollNumber,
+            student.username,
+            student.classValue,
+            student.section,
+            <TextInput
+              style={styles.input}
+              value={student.subject}
+              onChangeText={text => handleMarksChange(text, index, 'subject')}
+            />,
+            <TextInput
+              style={styles.input}
+              value={student.unitTest1}
+              onChangeText={text => handleMarksChange(text, index, 'exam')}
+            />,
+            <TextInput
+              style={styles.input}
+              value={student.final}
+              onChangeText={text => handleMarksChange(text, index, 'marks')}
+            />,
+          ])}
+          textStyle={styles.cellText}
+        />
+      </Table>
+      <Button title="Save Marks" onPress={handleSubmitMarks} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  title: {
-    fontSize: 17,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  input: {
-    width: '100%',
-    marginBottom: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-  },
+  container: { flex: 1, padding: 5, paddingTop: 30, backgroundColor: '#fff' },
+  head: { height: 50, backgroundColor: '#f1f8ff' },
+  text: { margin: 7, textAlign: 'center' },
+  cellText: { textAlign: 'center' },
+  input: { textAlign: 'center', borderWidth: 1, borderColor: '#C1C0B9', padding: 5 },
 });
 
-export default GradeScreen;
+export default MarksTable;

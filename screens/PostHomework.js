@@ -8,7 +8,7 @@ const HomeworkPost = () => {
   const navigation = useNavigation(); 
   const [classValue, setClassValue] = useState('');
   const [section, setSection] = useState('');
-  const [subject, setSubject] = useState('English'); // Default subject set to English
+  const [subject, setSubject] = useState(''); // Default subject set to empty string
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -30,7 +30,7 @@ const HomeworkPost = () => {
         // Clear input fields after posting assignment
         setClassValue('');
         setSection('');
-        setSubject('English'); // Reset subject to English
+        setSubject(''); // Reset subject to empty string
         setTitle('');
         setDescription('');
         setDueDate('');
@@ -47,12 +47,29 @@ const HomeworkPost = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Homework Post Page</Text>
-      <TextInput
+      {/* Dropdown for Class */}
+      <Picker
+        selectedValue={classValue}
         style={styles.input}
-        placeholder="Class"
-        value={classValue}
-        onChangeText={setClassValue}
-      />
+        onValueChange={(itemValue, itemIndex) => setClassValue(itemValue)}
+      >
+        <Picker.Item label="Select class" value="" />
+        <Picker.Item label="LKG" value="LKG" />
+        <Picker.Item label="UKG" value="UKG" />
+        <Picker.Item label="1st" value="1st" />
+        <Picker.Item label="2nd" value="2nd" />
+        <Picker.Item label="3rd" value="3rd" />
+        <Picker.Item label="4th" value="4th" />
+        <Picker.Item label="5th" value="5th" />
+        <Picker.Item label="6th" value="6th" />
+        <Picker.Item label="7th" value="7th" />
+        <Picker.Item label="8th" value="8th" />
+        <Picker.Item label="9th" value="9th" />
+        <Picker.Item label="10th" value="10th" />
+        <Picker.Item label="11th" value="11th" />
+        <Picker.Item label="12th" value="12th" />
+      </Picker>
+      {/* End Dropdown */}
       <TextInput
         style={styles.input}
         placeholder="Section"
@@ -65,6 +82,7 @@ const HomeworkPost = () => {
         style={styles.input}
         onValueChange={(itemValue, itemIndex) => setSubject(itemValue)}
       >
+        <Picker.Item label="Select subject" value="" />
         <Picker.Item label="English" value="English" />
         <Picker.Item label="Language" value="Language" />
         <Picker.Item label="Maths" value="Maths" />
