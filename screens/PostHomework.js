@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import axiosInstance from '../axiosInstance';
 import { useNavigation } from '@react-navigation/native';
+import { Picker } from '@react-native-picker/picker'; // Import Picker from @react-native-picker/picker
 
 const HomeworkPost = () => {
   const navigation = useNavigation(); 
   const [classValue, setClassValue] = useState('');
   const [section, setSection] = useState('');
-  const [subject, setSubject] = useState('');
+  const [subject, setSubject] = useState('English'); // Default subject set to English
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -29,7 +30,7 @@ const HomeworkPost = () => {
         // Clear input fields after posting assignment
         setClassValue('');
         setSection('');
-        setSubject('');
+        setSubject('English'); // Reset subject to English
         setTitle('');
         setDescription('');
         setDueDate('');
@@ -58,12 +59,19 @@ const HomeworkPost = () => {
         value={section}
         onChangeText={setSection}
       />
-      <TextInput
+      {/* Dropdown for Subject */}
+      <Picker
+        selectedValue={subject}
         style={styles.input}
-        placeholder="Subject"
-        value={subject}
-        onChangeText={setSubject}
-      />
+        onValueChange={(itemValue, itemIndex) => setSubject(itemValue)}
+      >
+        <Picker.Item label="English" value="English" />
+        <Picker.Item label="Language" value="Language" />
+        <Picker.Item label="Maths" value="Maths" />
+        <Picker.Item label="Sciences" value="Sciences" />
+        <Picker.Item label="Social" value="Social" />
+      </Picker>
+      {/* End Dropdown */}
       <TextInput
         style={styles.input}
         placeholder="Title"

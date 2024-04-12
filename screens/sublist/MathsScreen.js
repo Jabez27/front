@@ -1,116 +1,107 @@
-import React, { useState } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { StyleSheet, SafeAreaView, View, Text, TouchableOpacity, Modal } from 'react-native';
-import { Calendar } from 'react-native-calendars';
-import moment from 'moment';
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
+import axiosInstance from '../../axiosInstance';
 
+const HomeworkDisplay = () => {
+  const [homeworkList, setHomeworkList] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
 
-export default function HomeworkDisplay({ navigation }) {
-  const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'));
-  const [homeworks, setHomeworks] = useState({});
-  const [isCalendarVisible, setIsCalendarVisible] = useState(false);
+  useEffect(() => {
+    fetchCurrentUser();
 
-  const handleDayPress = (day) => {
-    setSelectedDate(day.dateString);
-    setIsCalendarVisible(false);
-  };
+    const interval = setInterval(() => {
+      if (currentUser) {
+        fetchHomeworkAssignments(currentUser.classValue, currentUser.section);
+      }
+    }, 3000);
+  
+    return () => clearInterval(interval);
+  }, [currentUser]);
 
-  const toggleCalendar = () => {
-    setIsCalendarVisible(!isCalendarVisible);
-  };
+const fetchCurrentUser = async () => {
+  try {
+    const response = await axiosInstance.get('http://192.168.27.213:6554/api/users/me');
+    if (response.status === 200) {
+      setCurrentUser(response.data);
+      fetchHomeworkAssignments(response.data.classValue, response.data.section);
+    } else {
+      throw new Error('Failed to fetch current user profile');
+    }
+  } catch (error) {
+    console.error('Error fetching current user profile:', error.message);
+  }
+};
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Homework Display</Text>
-      </View>
-      <View style={styles.homeworkContainer}>
-        <TouchableOpacity onPress={toggleCalendar}>
-          <Text style={styles.date}>{moment(selectedDate).format('MMM DD, YYYY')}</Text>
-        </TouchableOpacity>
-        <Text style={styles.homeworkText}>{homeworks[selectedDate] || 'No homework assig.'}</Text>
-      </View>
-      <Modal visible={isCalendarVisible} animationType="slide">
-        <View style={{ flex: 1 }}>
-          <TouchableOpacity style={styles.closeButton} onPress={toggleCalendar}>
-            <Text style={styles.closeButtonText}>Close</Text>
-          </TouchableOpacity>
-          <Calendar
-            onDayPress={handleDayPress}
-            markedDates={{
-              [selectedDate]: { selected: true, selectedColor: '#007AFF' },
-              ...Object.keys(homeworks).reduce((obj, date) => {
-                obj[date] = { marked: true, dotColor: '#FF6347' };
-                return obj;
-              }, {}),
-            }}
-          />
-        </View>
-      </Modal>
-    </SafeAreaView>
-  );
-}
+const fetchHomeworkAssignments = async (classValue, section) => {
+  try {
+    const response = await axiosInstance.get('http://192.168.27.213:6554/api/homework');
+    if (response.status === 200) {
+      const filteredHomework = response.data.filter(item => item.classValue === classValue && item.section === section  && item.subject === 'Maths');
+      setHomeworkList(filteredHomework);
+    } else {
+      throw new Error('Failed to fetch homework assignments');
+    }
+  } catch (error) {
+    console.error('Error fetching homework assignments:', error.message);
+  }
+};
 
-const Stack = createStackNavigator();
-
-const AppNavigator = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="PostHomework" component={PostHomework} />
-    </Stack.Navigator>
-  );
+return (
+  <View style={styles.container}>
+    <Text style={styles.title}>Homework Assignments</Text>
+    {homeworkList.length > 0 ? (
+      <FlatList
+        data={homeworkList}
+        renderItem={({ item }) => (
+          <View style={styles.assignmentContainer}>
+            <Text style={styles.assignmentTitle}>{item.title}</Text>
+            <Text style={styles.assignmentInfo}>Class: {item.classValue}</Text>
+            <Text style={styles.assignmentInfo}>Section: {item.section}</Text>
+            <Text style={styles.assignmentInfo}>Subject: {item.subject}</Text>
+            <Text style={styles.assignmentInfo}>Description: {item.description}</Text>
+            <Text style={styles.assignmentInfo}>Due Date: {item.dueDate}</Text>
+          </View>
+        )}
+        keyExtractor={(item) => item._id}
+      />
+    ) : (
+      <Text style={styles.noAssignments}>No homework assignments found</Text>
+    )}
+  </View>
+);
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  header: {
     padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#CCCCCC',
+    backgroundColor: '#fff',
   },
   title: {
-    fontSize: 17,
+    fontSize: 24,
     fontWeight: 'bold',
+    marginBottom: 20,
   },
-  homeworkContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#CCCCCC',
-  },
-  date: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    marginBottom: 30,
-    textAlign: 'center'
-  },
-  homeworkText: {
-    fontSize: 17,
-    lineHeight: 24,
-  },
-  addButton: {
-    backgroundColor: '#007AFF',
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    alignItems: 'center',
-    margin: 20,
-  },
-  addButtonLabel: {
-    fontSize: 17,
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-  },
-  closeButton: {
+  assignmentContainer: {
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
     padding: 10,
-    alignItems: 'flex-end',
   },
-  closeButtonText: {
-    fontSize: 17,
-    color: '#007AFF',
+  assignmentTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
+  assignmentInfo: {
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  noAssignments: {
+    fontSize: 16,
+    fontStyle: 'italic',
+  }
 });
+
+export default HomeworkDisplay;

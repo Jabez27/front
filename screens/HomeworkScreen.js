@@ -3,19 +3,13 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import { createStackNavigator } from '@react-navigation/stack';
 import 'react-native-gesture-handler';
 import EnglishScreen from './sublist/EnglishScreen';
-import TamilScreen from './sublist/TamilScreen'; // Import other subject screens
+import LanguageScreen from './sublist/LanguageScreen'; // Import other subject screens
 import MathsScreen from './sublist/MathsScreen';
 import SciencesScreen from './sublist/SciencesScreen';
 import SocialScreen from './sublist/SocialScreen';
 
 
-const HomeworkHeader = () => {
-  return (
-    <View style={styles.headerContainer}>
-      <Text style={styles.headerText}>Homework</Text>
-    </View>
-  );
-};
+
 
 const SubjectCard = ({ subject, color, navigation }) => {
   const handlePress = () => {
@@ -37,7 +31,7 @@ const SubjectsList = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <SubjectCard subject="English" color="#87CEEB" navigation={navigation} />
-      <SubjectCard subject="Tamil" color="#90EE90" navigation={navigation} />
+      <SubjectCard subject="Language" color="#90EE90" navigation={navigation} />
       <SubjectCard subject="Maths" color="#FFD700" navigation={navigation} />
       <SubjectCard subject="Sciences" color="#FFA07A" navigation={navigation} />
       <SubjectCard subject="Social" color="#FF69B4" navigation={navigation} />
@@ -48,11 +42,10 @@ const SubjectsList = ({ navigation }) => {
 const App = () => {
   return (
     <View style={styles.container}>
-      <HomeworkHeader />
       <Stack.Navigator initialRouteName="Subjects">
         <Stack.Screen name="Subjects" component={SubjectsList} options={{ headerShown: false }} />
         <Stack.Screen name="EnglishScreen" component={EnglishScreen} options={{ headerShown: false }}/>
-        <Stack.Screen name="TamilScreen" component={TamilScreen}  options={{ headerShown: false }}/>
+        <Stack.Screen name="LanguageScreen" component={LanguageScreen}  options={{ headerShown: false }}/>
         <Stack.Screen name="MathsScreen" component={MathsScreen}  options={{ headerShown: false }}/>
         <Stack.Screen name="SciencesScreen" component={SciencesScreen}  options={{ headerShown: false }}/>
         <Stack.Screen name="SocialScreen" component={SocialScreen}  options={{ headerShown: false }}/>

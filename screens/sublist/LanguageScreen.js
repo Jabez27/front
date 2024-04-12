@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
-import axiosInstance from '../axiosInstance';
+import axiosInstance from '../../axiosInstance';
 
 const HomeworkDisplay = () => {
   const [homeworkList, setHomeworkList] = useState([]);
@@ -36,7 +36,7 @@ const fetchHomeworkAssignments = async (classValue, section) => {
   try {
     const response = await axiosInstance.get('http://192.168.27.213:6554/api/homework');
     if (response.status === 200) {
-      const filteredHomework = response.data.filter(item => item.classValue === classValue && item.section === section);
+      const filteredHomework = response.data.filter(item => item.classValue === classValue && item.section === section  && item.subject === 'Language');
       setHomeworkList(filteredHomework);
     } else {
       throw new Error('Failed to fetch homework assignments');
