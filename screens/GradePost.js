@@ -1,101 +1,99 @@
-import React, { useState, useEffect } from 'react';
-import { View, Button, StyleSheet, TextInput } from 'react-native';
-import { Table, Row, Rows } from 'react-native-table-component';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import axiosInstance from '../axiosInstance';
+import { useNavigation } from '@react-navigation/native';
+import { Picker } from '@react-native-picker/picker';
 
-const MarksTable = () => {
-  const [studentData, setStudentData] = useState([]);
+const FilterGrade = () => {
+  const navigation = useNavigation();
+  const [classValue, setClassValue] = useState('');
+  const [section, setSection] = useState('');
+  const [subject, setSubject] = useState(''); // Default subject set to empty string
+  const [exam, setExam] = useState('');
 
-  useEffect(() => {
-    fetchStudents();
-  }, []);
-
-  const fetchStudents = async () => {
-    try {
-      const response = await axiosInstance.get('http://192.168.27.213:6554/api/users/');
-      if (response.status === 200) {
-        const students = response.data;
-        const initialStudentData = students.map(student => ({
-          rollNumber: student.rollNumber,
-          username: student.username,
-          classValue: student.classValue,
-          section: student.section,
-          subject: '',
-          exam: '',
-          marks: '',
-        }));
-        setStudentData(initialStudentData);
-      } else {
-        throw new Error('Failed to fetch students');
-      }
-    } catch (error) {
-      console.error('Error fetching students:', error.message);
-    }
-  };
-
-  const handleMarksChange = (text, rowIndex, columnName) => {
-    const updatedStudentData = [...studentData];
-    updatedStudentData[rowIndex][columnName] = text;
-    setStudentData(updatedStudentData);
-  };
-
-  const handleSubmitMarks = async () => {
-    try {
-      // Send marks data to the server to save in the database
-      const response = await axiosInstance.post('http://192.168.27.213:6554/api/grades', {
-        grades: studentData,
-      });
-      if (response.status === 201) {
-        alert('Marks uploaded successfully');
-      } else {
-        throw new Error('Failed to upload marks');
-      }
-    } catch (error) {
-      console.error('Error uploading marks:', error.message);
-      alert('Failed to upload marks. Please try again.');
-    }
+  const handleFilter = () => {
+    navigation.navigate('MarksTable', { classValue, section, subject, exam });
   };
 
   return (
     <View style={styles.container}>
-      <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
-        <Row data={['Roll Number', 'Username', 'Class', 'Section', 'Subject', 'Exam', 'Marks']} style={styles.head} textStyle={styles.text} />
-        <Rows
-          data={studentData.map((student, index) => [
-            student.rollNumber,
-            student.username,
-            student.classValue,
-            student.section,
-            <TextInput
-              style={styles.input}
-              value={student.subject}
-              onChangeText={text => handleMarksChange(text, index, 'subject')}
-            />,
-            <TextInput
-              style={styles.input}
-              value={student.unitTest1}
-              onChangeText={text => handleMarksChange(text, index, 'exam')}
-            />,
-            <TextInput
-              style={styles.input}
-              value={student.final}
-              onChangeText={text => handleMarksChange(text, index, 'marks')}
-            />,
-          ])}
-          textStyle={styles.cellText}
-        />
-      </Table>
-      <Button title="Save Marks" onPress={handleSubmitMarks} />
+      <Text style={styles.title}>FilterGrade</Text>
+      <Picker
+        selectedValue={classValue}
+        style={styles.input}
+        onValueChange={(itemValue, itemIndex) => setClassValue(itemValue)}>
+        <Picker.Item label="Select class" value="" />
+        <Picker.Item label="LKG" value="LKG" />
+        <Picker.Item label="UKG" value="UKG" />
+        <Picker.Item label="1st" value="1st" />
+        <Picker.Item label="2nd" value="2nd" />
+        <Picker.Item label="3rd" value="3rd" />
+        <Picker.Item label="4th" value="4th" />
+        <Picker.Item label="5th" value="5th" />
+        <Picker.Item label="6th" value="6th" />
+        <Picker.Item label="7th" value="7th" />
+        <Picker.Item label="8th" value="8th" />
+        <Picker.Item label="9th" value="9th" />
+        <Picker.Item label="10th" value="10th" />
+        <Picker.Item label="11th" value="11th" />
+        <Picker.Item label="12th" value="12th" />
+      </Picker>
+
+      <Picker
+        selectedValue={section}
+        style={styles.input}
+        onValueChange={(itemValue, itemIndex) => setSection(itemValue)}
+      >
+        <Picker.Item label="Select Section" value="" />
+        <Picker.Item label="A" value="A" />
+        <Picker.Item label="B" value="B" />
+        <Picker.Item label="C" value="C" />
+        <Picker.Item label="D" value="D" />
+        <Picker.Item label="E" value="E" />
+        <Picker.Item label="F" value="F" />
+      </Picker>
+
+      <Picker
+        selectedValue={subject}
+        style={styles.input}
+        onValueChange={(itemValue, itemIndex) => setSubject(itemValue)}
+      >
+        <Picker.Item label="Select subject" value="" />
+        <Picker.Item label="English" value="English" />
+        <Picker.Item label="Language" value="Language" />
+        <Picker.Item label="Maths" value="Maths" />
+        <Picker.Item label="Sciences" value="Sciences" />
+        <Picker.Item label="Social" value="Social" />
+      </Picker>
+      <TextInput
+        style={styles.input}
+        placeholder="exam name"
+        value={exam}
+        onChangeText={setExam}
+      />
+      <Button title="Filter" onPress={handleFilter} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 5, paddingTop: 30, backgroundColor: '#fff' },
-  head: { height: 50, backgroundColor: '#f1f8ff' },
-  text: { margin: 7, textAlign: 'center' },
-  cellText: { textAlign: 'center' },
-  input: { textAlign: 'center', borderWidth: 1, borderColor: '#C1C0B9', padding: 5 },
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  input: {
+    marginBottom: 20,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+  },
 });
 
-export default MarksTable;
+export default FilterGrade;

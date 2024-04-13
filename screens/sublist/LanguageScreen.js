@@ -24,6 +24,7 @@ const fetchCurrentUser = async () => {
     if (response.status === 200) {
       setCurrentUser(response.data);
       fetchHomeworkAssignments(response.data.classValue, response.data.section);
+      //console.log(response.data.section);
     } else {
       throw new Error('Failed to fetch current user profile');
     }
@@ -36,7 +37,7 @@ const fetchHomeworkAssignments = async (classValue, section) => {
   try {
     const response = await axiosInstance.get('http://192.168.27.213:6554/api/homework');
     if (response.status === 200) {
-      const filteredHomework = response.data.filter(item => item.classValue === classValue && item.section === section  && item.subject === 'Language');
+      const filteredHomework = response.data.filter(item => item.classValue === classValue  && item.section === section && item.subject === 'Language');
       setHomeworkList(filteredHomework);
     } else {
       throw new Error('Failed to fetch homework assignments');

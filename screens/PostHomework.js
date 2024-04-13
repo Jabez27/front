@@ -30,7 +30,7 @@ const HomeworkPost = () => {
         // Clear input fields after posting assignment
         setClassValue('');
         setSection('');
-        setSubject(''); // Reset subject to empty string
+        setSubject('');
         setTitle('');
         setDescription('');
         setDueDate('');
@@ -46,13 +46,11 @@ const HomeworkPost = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Homework Post Page</Text>
-      {/* Dropdown for Class */}
+      <Text style={styles.title}>Homework Page</Text>
       <Picker
         selectedValue={classValue}
         style={styles.input}
-        onValueChange={(itemValue, itemIndex) => setClassValue(itemValue)}
-      >
+        onValueChange={(itemValue, itemIndex) => setClassValue(itemValue)}>
         <Picker.Item label="Select class" value="" />
         <Picker.Item label="LKG" value="LKG" />
         <Picker.Item label="UKG" value="UKG" />
@@ -69,14 +67,21 @@ const HomeworkPost = () => {
         <Picker.Item label="11th" value="11th" />
         <Picker.Item label="12th" value="12th" />
       </Picker>
-      {/* End Dropdown */}
-      <TextInput
+
+      <Picker
+        selectedValue={section}
         style={styles.input}
-        placeholder="Section"
-        value={section}
-        onChangeText={setSection}
-      />
-      {/* Dropdown for Subject */}
+        onValueChange={(itemValue, itemIndex) => setSection(itemValue)}
+      >
+        <Picker.Item label="Select Section" value="" />
+        <Picker.Item label="A" value="A" />
+        <Picker.Item label="B" value="B" />
+        <Picker.Item label="C" value="C" />
+        <Picker.Item label="D" value="D" />
+        <Picker.Item label="E" value="E" />
+        <Picker.Item label="F" value="F" />
+      </Picker>
+
       <Picker
         selectedValue={subject}
         style={styles.input}
@@ -89,7 +94,6 @@ const HomeworkPost = () => {
         <Picker.Item label="Sciences" value="Sciences" />
         <Picker.Item label="Social" value="Social" />
       </Picker>
-      {/* End Dropdown */}
       <TextInput
         style={styles.input}
         placeholder="Title"
