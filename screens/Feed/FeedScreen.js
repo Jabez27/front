@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import axiosInstance from '../axiosInstance';
+import axiosInstance from '../../axiosInstance';
 
 const FeedScreen = () => {
   const [feedUpdates, setFeedUpdates] = useState([]);

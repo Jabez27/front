@@ -1,52 +1,23 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import axiosInstance from '../axiosInstance';
+import axiosInstance from '../../axiosInstance';
 import { useNavigation } from '@react-navigation/native';
-import { Picker } from '@react-native-picker/picker'; // Import Picker from @react-native-picker/picker
+import { Picker } from '@react-native-picker/picker';
 
-const HomeworkPost = () => {
-  const navigation = useNavigation(); 
+const FilterGrade = () => {
+  const navigation = useNavigation();
   const [classValue, setClassValue] = useState('');
   const [section, setSection] = useState('');
   const [subject, setSubject] = useState(''); // Default subject set to empty string
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [dueDate, setDueDate] = useState('');
+  const [exam, setExam] = useState('');
 
-  const handlePost = async () => {
-    try {
-      const response = await axiosInstance.post('http://192.168.27.213:6554/api/homework', {
-        classValue,
-        section,
-        subject,
-        title,
-        description,
-        dueDate,
-      });
-
-      if (response.status === 201) {
-        alert('Homework assignment posted successfully');
-
-        // Clear input fields after posting assignment
-        setClassValue('');
-        setSection('');
-        setSubject('');
-        setTitle('');
-        setDescription('');
-        setDueDate('');
-        navigation.replace("Main");
-      } else {
-        throw new Error('Failed to post homework assignment');
-      }
-    } catch (error) {
-      console.error('Error posting homework assignment:', error.message);
-      alert('Failed to post homework assignment. Please try again.');
-    }
+  const handleFilter = () => {
+    navigation.navigate('MarksTable', { classValue, section, subject, exam });
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Homework Page</Text>
+      <Text style={styles.title}>FilterGrade</Text>
       <Picker
         selectedValue={classValue}
         style={styles.input}
@@ -94,27 +65,21 @@ const HomeworkPost = () => {
         <Picker.Item label="Sciences" value="Sciences" />
         <Picker.Item label="Social" value="Social" />
       </Picker>
-      <TextInput
+
+      <Picker
+        selectedValue={exam}
         style={styles.input}
-        placeholder="Title"
-        value={title}
-        onChangeText={setTitle}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Description"
-        value={description}
-        onChangeText={setDescription}
-        multiline
-        numberOfLines={4}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Due Date"
-        value={dueDate}
-        onChangeText={setDueDate}
-      />
-      <Button title="Post Homework" onPress={handlePost} />
+        onValueChange={(itemValue, itemIndex) => setExam(itemValue)}
+      >
+        <Picker.Item label="Select exam" value="" />
+        <Picker.Item label="SA1" value="SA1" />
+        <Picker.Item label="SA2" value="SA2" />
+        <Picker.Item label="SA3" value="SA3" />
+        <Picker.Item label="SA4" value="SA4" />
+        <Picker.Item label="SA5" value="SA5" />
+        <Picker.Item label="SA6" value="SA6" />
+      </Picker>
+      <Button title="Filter" onPress={handleFilter} />
     </View>
   );
 };
@@ -139,4 +104,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeworkPost;
+export default FilterGrade;

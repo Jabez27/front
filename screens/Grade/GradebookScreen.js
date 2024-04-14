@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axiosInstance from '../axiosInstance';
+import axiosInstance from '../../axiosInstance';
 
 const UserMarksPage = () => {
   const [marks, setMarks] = useState([]);

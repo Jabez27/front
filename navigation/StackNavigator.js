@@ -8,16 +8,16 @@
 
 
 
-  import GradePost from '../screens/GradePost';
-  import LoginScreen from '../screens/LoginScreen';
-  import RegisterScreen from '../screens/RegisterScreen';
-  import FeedScreen from '../screens/FeedScreen'; // Update import statement
-  import ChatroomScreen from '../screens/ChatroomScreen'; // Update import statement
-  import GradebookScreen from '../screens/GradebookScreen'; // Update import statement
-  import HomeworkScreen from '../screens/HomeworkScreen'; // Update import statement
-  import PostHomework from '../screens/PostHomework';
-  import FeedPost from '../screens/FeedPost';
-  import MarksTable from '../screens/MarksTable'; // Import MarksTable screen
+  import GradePost from '../screens/Grade/GradePost';
+  import LoginScreen from '../screens/Main/LoginScreen';
+  import RegisterScreen from '../screens/Main/RegisterScreen';
+  import FeedScreen from '../screens/Feed/FeedScreen'; 
+  import ChatScreen from '../screens/Chat/ChatScreen'; // Update import statement
+  import GradebookScreen from '../screens/Grade/GradebookScreen'; // Update import statement
+  import HomeworkScreen from '../screens/Home/HomeworkScreen'; // Update import statement
+  import PostHomework from '../screens/Home/PostHomework';
+  import FeedPost from '../screens/Feed/FeedPost';
+  import MarksTable from '../screens/Grade/MarksTable'; 
   //import HomeWorkPost from '../screens/HomeWorkPost'
 
   import { Entypo } from "@expo/vector-icons";
@@ -135,7 +135,7 @@
         />
         <Tab.Screen
           name="Chat"
-          component={ChatroomScreen}
+          component={ChatScreen}
           options={{
             tabBarLabel: "Chatroom",
             tabBarLabelStyle: { color: "black" },

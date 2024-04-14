@@ -2,11 +2,11 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import 'react-native-gesture-handler';
-import EnglishScreen from './sublist/EnglishScreen';
-import LanguageScreen from './sublist/LanguageScreen'; // Import other subject screens
-import MathsScreen from './sublist/MathsScreen';
-import SciencesScreen from './sublist/SciencesScreen';
-import SocialScreen from './sublist/SocialScreen';
+import EnglishScreen from './EnglishScreen';
+import LanguageScreen from './LanguageScreen'; // Import other subject screens
+import MathsScreen from './MathsScreen';
+import SciencesScreen from './SciencesScreen';
+import SocialScreen from './SocialScreen';
 
 
 

@@ -2,7 +2,7 @@ import { Text, View, SafeAreaView, Image, KeyboardAvoidingView, TextInput, Press
 import React, { useState, useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import axiosInstance from "../axiosInstance";
+import axiosInstance from "../../axiosInstance";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation }) => {

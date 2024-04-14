@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Button, StyleSheet, TextInput, ScrollView } from 'react-native'; // Import ScrollView
 import { Table, Row, Rows } from 'react-native-table-component';
-import axiosInstance from '../axiosInstance';
+import axiosInstance from '../../axiosInstance';
 import { useNavigation } from '@react-navigation/native';
 
 const MarksTable = ({ route }) => {
@@ -56,7 +56,7 @@ const MarksTable = ({ route }) => {
       console.log('Response:', response);
       if (response.status === 201) {
         alert('Marks uploaded successfully');
-        navigation.navigate('Main'); // Navigate back to main screen after successful submission
+        navigation.navigate('Main'); 
       } else {
         throw new Error('Failed to upload marks');
       }
