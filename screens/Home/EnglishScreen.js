@@ -17,10 +17,12 @@ const HomeworkDisplay = ({ navigation }) => {
       if (currentUser) {
         fetchHomeworkAssignments(currentUser.classValue, currentUser.section);
       }
-    }, 3000);
+    }, 30000);
 
     return () => clearInterval(interval);
   }, [currentUser]);
+
+
 
   const fetchCurrentUser = async () => {
     try {
@@ -49,7 +51,8 @@ const HomeworkDisplay = ({ navigation }) => {
         const filteredHomework = allHomework.filter(item =>
           item.classValue === classValue &&
           item.section === section &&
-          item.subject === 'English'
+          item.subject === 'English' &&
+          moment(item.createdAt).format('YYYY-MM-DD') === selectedDate
         );
         setFilteredHomework(filteredHomework);
       } else {
@@ -83,7 +86,7 @@ const HomeworkDisplay = ({ navigation }) => {
           <View style={styles.assignmentItemContainer}>
             <Text style={styles.assignmentTitle}>{item.title}</Text>
             <Text style={styles.assignmentInfo}>{item.description}</Text>
-            <Text style={styles.assignmentInfo}>Due Date: {item.dueDate}</Text>
+            <Text style={styles.dueDate}>Due Date: {item.dueDate}</Text>
           </View>
         )}
         ListEmptyComponent={() => (
@@ -120,19 +123,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    fontWeight: 'bold',
     backgroundColor: '#fff',
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 15,
     textAlign: 'center',
   },
   date: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
+    
   },
   assignmentItemContainer: {
     marginBottom: 20,
@@ -142,15 +147,16 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   assignmentTitle: {
-    fontSize: 18,
+    fontSize: 24,
+    marginTop: 5,
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'justify',
   },
   assignmentInfo: {
     fontSize: 16,
-    marginBottom: 5,
-    textAlign: 'justify',
+    lineHeight: 24,
+    marginBottom: 10,
   },
   noAssignments: {
     fontSize: 16,
@@ -164,6 +170,10 @@ const styles = StyleSheet.create({
   closeButtonText: {
     fontSize: 18,
     color: '#007AFF',
+  },
+  dueDate: {
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

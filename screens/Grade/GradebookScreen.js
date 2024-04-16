@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, Dimensions } from 'react-native'; // Add Dimensions
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from '../../axiosInstance';
+import { BarChart, PieChart } from 'react-native-chart-kit';
 
 const UserMarksPage = () => {
   const [marks, setMarks] = useState([]);
@@ -49,23 +50,83 @@ const UserMarksPage = () => {
     }
   };
 
+  // Prepare data for pie chart
+  const preparePieChartData = () => {
+    const subjects = {};
+    marks.forEach(mark => {
+      if (subjects[mark.subject]) {
+        subjects[mark.subject] += mark.marks;
+      } else {
+        subjects[mark.subject] = mark.marks;
+      }
+    });
+    return Object.keys(subjects).map(subject => ({ name: subject, value: subjects[subject] }));
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Your Marks</Text>
-      {marks.length === 0 ? (
-        <Text>No marks available</Text>
-      ) : (
-        <View>
-          {marks.map((mark, index) => (
-            <View key={index} style={styles.markContainer}>
-              <Text style={styles.markText}>Subject: {mark.subject}</Text>
-              <Text style={styles.markText}>Exam: {mark.exam}</Text>
-              <Text style={styles.markText}>Marks: {mark.marks}</Text>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView>
+        <View style={styles.container}>
+          <Text style={styles.title}>Your Marks</Text>
+          {marks.length === 0 ? (
+            <Text>No marks available</Text>
+          ) : (
+            <View>
+              {/* Bar Chart */}
+              <Text style={styles.chartTitle}>Bar Chart</Text>
+              <BarChart
+                data={{
+                  labels: marks.map(mark => mark.subject),
+                  datasets: [
+                    {
+                      data: marks.map(mark => mark.marks),
+                    },
+                  ],
+                }}
+                width={Dimensions.get('window').width - 40}
+                height={220}
+                yAxisLabel="Marks"
+                chartConfig={{
+                  backgroundColor: '#e26a00',
+                  backgroundGradientFrom: '#fb8c00',
+                  backgroundGradientTo: '#ffa726',
+                  decimalPlaces: 0,
+                  color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                  style: {
+                    borderRadius: 16,
+                  },
+                }}
+                style={{
+                  marginVertical: 8,
+                  borderRadius: 16,
+                }}
+              />
+              {/* Pie Chart */}
+              <Text style={styles.chartTitle}>Pie Chart</Text>
+              <PieChart
+                data={preparePieChartData()}
+                width={Dimensions.get('window').width - 40}
+                height={220}
+                chartConfig={{
+                  backgroundColor: '#e26a00',
+                  backgroundGradientFrom: '#fb8c00',
+                  backgroundGradientTo: '#ffa726',
+                  decimalPlaces: 0,
+                  color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                  style: {
+                    borderRadius: 16,
+                  },
+                }}
+                accessor="value"
+                backgroundColor="transparent"
+                paddingLeft="15"
+                absolute
+              />
             </View>
-          ))}
+          )}
         </View>
-      )}
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -81,17 +142,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
-  markContainer: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 150,
+  chartTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
     marginBottom: 10,
-    borderRadius: 8, // Rounded corners
-    backgroundColor: '#fff', // White background
-  },
-  markText: {
-    fontSize: 16,
-    marginBottom: 5,
+    marginTop: 20,
+    textAlign: 'center',
   },
 });
 

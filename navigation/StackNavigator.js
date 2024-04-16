@@ -12,13 +12,15 @@
   import LoginScreen from '../screens/Main/LoginScreen';
   import RegisterScreen from '../screens/Main/RegisterScreen';
   import FeedScreen from '../screens/Feed/FeedScreen'; 
-  import ChatScreen from '../screens/Chat/ChatScreen'; // Update import statement
+  //import ChatScreen from '../screens/Chat/ChatScreen'; // Update import statement
   import GradebookScreen from '../screens/Grade/GradebookScreen'; // Update import statement
   import HomeworkScreen from '../screens/Home/HomeworkScreen'; // Update import statement
   import PostHomework from '../screens/Home/PostHomework';
   import FeedPost from '../screens/Feed/FeedPost';
   import MarksTable from '../screens/Grade/MarksTable'; 
-  //import HomeWorkPost from '../screens/HomeWorkPost'
+  import GroupList from '../screens/Chat/GroupList';
+  import CreateChatroomScreen from '../screens/Chat/CreateChatroom';
+  import Chatroom from '../screens/Chat/Chatroom';
 
   import { Entypo } from "@expo/vector-icons";
   import { AntDesign } from "@expo/vector-icons";
@@ -37,6 +39,8 @@
         <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Main" component={DrawerNa} options={{ headerShown: false }} />
         <Stack.Screen name="MarksTable" component={MarksTable} />
+        <Stack.Screen name="Chatroom" component={Chatroom} />
+        <Stack.Screen name="Group" component={GroupList} />
       </Stack.Navigator>
     );
   };
@@ -82,15 +86,24 @@
               ),
             }}
           />
-          {/* <Drawer.Screen
-            name="HomeWorkPost"
-            component={HomeWorkPost}
+          <Drawer.Screen
+            name="Chatroom"
+            component={Chatroom}
             options={{
               drawerIcon: ({ focused, color, size }) => (
                 <Ionicons name={focused ? 'add-circle' : 'add-circle-outline'} size={size} color={color} />
               ),
             }}
-          /> */}
+          />
+          <Drawer.Screen
+            name="CreateChat"
+            component={CreateChatroomScreen}
+            options={{
+              drawerIcon: ({ focused, color, size }) => (
+                <Ionicons name={focused ? 'add-circle' : 'add-circle-outline'} size={size} color={color} />
+              ),
+            }}
+          />
         </Drawer.Navigator>
       </>
     );
@@ -135,7 +148,7 @@
         />
         <Tab.Screen
           name="Chat"
-          component={ChatScreen}
+          component={GroupList}
           options={{
             tabBarLabel: "Chatroom",
             tabBarLabelStyle: { color: "black" },

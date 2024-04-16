@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
 import axiosInstance from '../../axiosInstance';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker'; // Import Picker from @react-native-picker/picker
@@ -45,6 +45,7 @@ const HomeworkPost = () => {
   };
 
   return (
+    <ScrollView>
     <View style={styles.container}>
       <Text style={styles.title}>Homework Page</Text>
       <Picker
@@ -116,6 +117,7 @@ const HomeworkPost = () => {
       />
       <Button title="Post Homework" onPress={handlePost} />
     </View>
+    </ScrollView>
   );
 };
 
