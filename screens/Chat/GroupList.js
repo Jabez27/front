@@ -1,43 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from '../../axiosInstance';
 
-const GroupsDisplayScreen = ({ navigation }) => {
-  const [chatrooms, setChatrooms] = useState([]);
+const GroupListScreen = ({ navigation }) => {
   const [groupName, setGroupName] = useState('');
-  const [classValue, setClassValue] = useState(''); 
-  const [section, setSection] = useState(''); 
+  const [classValue, setClassValue] = useState('');
+  const [section, setSection] = useState('');
+  const [chatrooms, setChatrooms] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchChatrooms(); 
-  }, [groupName, classValue, section]); 
+    fetchGroups();
+  }, []);
 
-  const fetchChatrooms = async () => {
+  const fetchGroups = async () => {
     try {
-      const response = await axiosInstance.get('http://192.168.27.213:6554/api/chatrooms', {
-        params: {
+      const authToken = await AsyncStorage.getItem('authToken');
+      const response = await axiosInstance.get('http://192.168.27.213:6554/api/chatrooms',
+        {
           groupName,
           classValue,
           section,
         },
-      });
-      if (response.status === 200) {
-        setChatrooms(response.data);
-        console.log('groupName:', groupName);
-        console.log('classValue:', classValue);
-        console.log('section:', section);
-        console.log('response.data:', response.data);
-      } else {
-        throw new Error('Failed to fetch chatrooms');
-      }
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          }
+        });
+      const data = response.data;
+      setChatrooms(data);
+      setLoading(false);
     } catch (error) {
-      console.error('Error fetching chatrooms:', error.message);
+      console.error('Error fetching groups:', error);
+      setLoading(false);
     }
   };
-  
-  // const handleChatroomPress = (chatroom) => {
-  //   navigation.navigate('Chatroom', { chatroom });
-  // };
+  const handleChatroomPress = (chatroom) => {
+    navigation.navigate('Chatroom', { chatroom });
+  };
 
   return (
     <View style={styles.container}>
@@ -46,12 +48,13 @@ const GroupsDisplayScreen = ({ navigation }) => {
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => handleChatroomPress(item)}>
             <View style={styles.chatroomItem}>
-              <Text style={styles.chatroomName}>{item.name}</Text>
+              <Text style={styles.chatroomName}>{item.groupName}</Text>
             </View>
           </TouchableOpacity>
         )}
         keyExtractor={(item) => item._id.toString()}
       />
+
     </View>
   );
 };
@@ -73,4 +76,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GroupsDisplayScreen;
+export default GroupListScreen;

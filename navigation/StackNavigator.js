@@ -86,7 +86,7 @@
               ),
             }}
           />
-          <Drawer.Screen
+          {/* <Drawer.Screen
             name="Chatroom"
             component={Chatroom}
             options={{
@@ -94,7 +94,7 @@
                 <Ionicons name={focused ? 'add-circle' : 'add-circle-outline'} size={size} color={color} />
               ),
             }}
-          />
+          /> */}
           <Drawer.Screen
             name="CreateChat"
             component={CreateChatroomScreen}
