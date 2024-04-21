@@ -21,6 +21,8 @@
   import GroupList from '../screens/Chat/GroupList';
   import CreateChatroomScreen from '../screens/Chat/CreateChatroom';
   import Chatroom from '../screens/Chat/Chatroom';
+  import UserProfileScreen from '../screens/User/UserProfileScreen';
+  import Payment from '../screens/Main/Payment';
 
   import { Entypo } from "@expo/vector-icons";
   import { AntDesign } from "@expo/vector-icons";
@@ -41,6 +43,7 @@
         <Stack.Screen name="MarksTable" component={MarksTable} />
         <Stack.Screen name="Chatroom" component={Chatroom} />
         <Stack.Screen name="Group" component={GroupList} />
+        <Stack.Screen name="Payment" component={Payment} />
       </Stack.Navigator>
     );
   };
@@ -86,15 +89,15 @@
               ),
             }}
           />
-          {/* <Drawer.Screen
-            name="Chatroom"
-            component={Chatroom}
+          <Drawer.Screen
+            name="User"
+            component={UserProfileScreen}
             options={{
               drawerIcon: ({ focused, color, size }) => (
                 <Ionicons name={focused ? 'add-circle' : 'add-circle-outline'} size={size} color={color} />
               ),
             }}
-          /> */}
+          />
           <Drawer.Screen
             name="CreateChat"
             component={CreateChatroomScreen}

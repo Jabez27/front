@@ -10,7 +10,7 @@ const GradeScreen = () => {
   useEffect(() => {
     const fetchGrades = async () => {
       try {
-        const response = await axios.get('http://192.168.27.213:6554/api/grades');
+        const response = await axios.get('http://192.168.254.213:6554/api/grades');
         setGrades(response.data);
         setLoading(false);
         setError(null);

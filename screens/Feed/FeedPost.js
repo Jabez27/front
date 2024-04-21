@@ -15,7 +15,7 @@ const FeedPost = () => {
       const username = await AsyncStorage.getItem('username'); // Assuming you store the username in AsyncStorage
       const createdAt = new Date(); // Get the current date and time
   
-      const feedResponse = await axiosInstance.post('http://192.168.27.213:6554/api/feed', {
+      const feedResponse = await axiosInstance.post('http://192.168.254.213:6554/api/feed', {
         content: content,
         username: username,
         createdAt: createdAt,

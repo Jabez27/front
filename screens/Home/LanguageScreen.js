@@ -24,7 +24,7 @@ const HomeworkDisplay = ({ navigation }) => {
 
   const fetchHomeworkAssignments = async (classValue, section) => {
     try {
-      const response = await axiosInstance.get('http://192.168.27.213:6554/api/homework');
+      const response = await axiosInstance.get('http://192.168.254.213:6554/api/homework');
       if (response.status === 200) {
         const allHomework = response.data.map(item => ({
           ...item,
@@ -49,7 +49,7 @@ const HomeworkDisplay = ({ navigation }) => {
 
   const fetchCurrentUser = async () => {
     try {
-      const response = await axiosInstance.get('http://192.168.27.213:6554/api/users/me');
+      const response = await axiosInstance.get('http://192.168.254.213:6554/api/users/me');
       if (response.status === 200) {
         setCurrentUser(response.data);
         fetchHomeworkAssignments(response.data.classValue, response.data.section);

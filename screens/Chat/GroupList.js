@@ -4,9 +4,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from '../../axiosInstance';
 
 const GroupListScreen = ({ navigation }) => {
-  const [groupName, setGroupName] = useState('');
-  const [classValue, setClassValue] = useState('');
-  const [section, setSection] = useState('');
   const [chatrooms, setChatrooms] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -17,18 +14,12 @@ const GroupListScreen = ({ navigation }) => {
   const fetchGroups = async () => {
     try {
       const authToken = await AsyncStorage.getItem('authToken');
-      const response = await axiosInstance.get('http://192.168.27.213:6554/api/chatrooms',
-        {
-          groupName,
-          classValue,
-          section,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`
-          }
-        });
+      const response = await axiosInstance.get('http://192.168.254.213:6554/api/chatrooms', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        }
+      });
       const data = response.data;
       setChatrooms(data);
       setLoading(false);
@@ -37,8 +28,9 @@ const GroupListScreen = ({ navigation }) => {
       setLoading(false);
     }
   };
+
   const handleChatroomPress = (chatroom) => {
-    navigation.navigate('Chatroom', { chatroom });
+    navigation.navigate('Chatroom', { chatroomid: chatroom._id }); // Pass only the chatroom ID
   };
 
   return (
@@ -54,7 +46,6 @@ const GroupListScreen = ({ navigation }) => {
         )}
         keyExtractor={(item) => item._id.toString()}
       />
-
     </View>
   );
 };

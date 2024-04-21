@@ -15,7 +15,7 @@ const HomeworkPost = () => {
 
   const handlePost = async () => {
     try {
-      const response = await axiosInstance.post('http://192.168.27.213:6554/api/homework', {
+      const response = await axiosInstance.post('http://192.168.254.213:6554/api/homework', {
         classValue,
         section,
         subject,

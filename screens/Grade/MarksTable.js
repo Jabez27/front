@@ -16,7 +16,7 @@ const MarksTable = ({ route }) => {
 
   const fetchStudents = async () => {
     try {
-      const response = await axiosInstance.get('http://192.168.27.213:6554/api/users/');
+      const response = await axiosInstance.get('http://192.168.254.213:6554/api/users/');
       if (response.status === 200) {
         const students = response.data;
         const filteredStudents = students.filter(student => (
@@ -50,7 +50,7 @@ const MarksTable = ({ route }) => {
   const handleSubmitMarks = async () => {
     try {
       console.log('Submitting marks:', studentData);
-      const response = await axiosInstance.post('http://192.168.27.213:6554/api/grades', {
+      const response = await axiosInstance.post('http://192.168.254.213:6554/api/grades', {
         grades: studentData,
       });
       console.log('Response:', response);

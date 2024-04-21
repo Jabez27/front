@@ -16,7 +16,7 @@ const UserMarksPage = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const response = await axiosInstance.get('http://192.168.27.213:6554/api/users/me');
+      const response = await axiosInstance.get('http://192.168.254.213:6554/api/users/me');
       if (response.status === 200) {
         setCurrentUser(response.data); // Set current user state
         fetchUserMarks(response.data.classValue, response.data.section, response.data.rollNumber);
@@ -31,7 +31,7 @@ const UserMarksPage = () => {
   const fetchUserMarks = async (classValue, section, rollNumber) => {
     try {
       const authToken = await AsyncStorage.getItem('authToken');
-      const response = await axiosInstance.get('http://192.168.27.213:6554/api/grades/me', {
+      const response = await axiosInstance.get('http://192.168.254.213:6554/api/grades/me', {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },

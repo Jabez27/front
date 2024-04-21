@@ -13,7 +13,7 @@ const HomeworkPage = () => {
 
   const fetchHomeworkData = async () => {
     try {
-      const response = await axios.get('http://192.168.27.213:6554/api/homework');
+      const response = await axios.get('http://192.168.254.213:6554/api/homework');
       setHomeworkData(response.data);
     } catch (error) {
       console.error('Error fetching homework data:', error);

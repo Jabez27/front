@@ -12,7 +12,7 @@ const CreateChatroomScreen = () => {
 
   const handleCreateChatroom = async () => {
     try {
-      const response = await axiosInstance.post('http://192.168.27.213:6554/api/chatrooms', {
+      const response = await axiosInstance.post('http://192.168.254.213:6554/api/chatrooms', {
         groupName,
         classValue,
         section,

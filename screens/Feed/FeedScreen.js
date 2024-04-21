@@ -17,7 +17,7 @@ const FeedScreen = () => {
 
   const fetchFeedUpdates = async () => {
     try {
-      const response = await axiosInstance.get('http://192.168.27.213:6554/api/feed');
+      const response = await axiosInstance.get('http://192.168.254.213:6554/api/feed');
       if (response.status === 200) {
         setFeedUpdates(response.data);
       } else {
